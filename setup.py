@@ -12,7 +12,7 @@ setup(name="iwlib",
       description="Python module to interface with iwlib",
       author="Harald Hoyer",
       author_email="harald@redhat.com",
-      url="http://fedoraproject.org/wiki/python-iwlib",
+      url="http://git.fedorahosted.org/git/python-iwlib.git",
       long_description = """The iwlib module provides functions to
                             examine the wireless network devices installed on the system.""",
       ext_modules=[iwlib])

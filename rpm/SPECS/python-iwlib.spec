@@ -6,7 +6,7 @@ Name: python-iwlib
 Version: 0.1
 Release: 1%{?dist}
 URL: http://git.fedorahosted.org/git/python-iwlib.git
-Source: https://fedorahosted.org/released/python-iwlib/%{name}-%{version}.tar.bz2
+Source: http://fedorahosted.org/released/python-iwlib/%{name}-%{version}.tar.bz2
 License: GPLv2
 Group: System Environment/Libraries
 ExcludeArch: s390 s390x
@@ -44,5 +44,5 @@ rm -rf %{buildroot}
 %endif
 
 %changelog
-* Mon Jul 20 2009 Jiri Popelka <jpopelka@redhat.com> - 0.1-1
+* Mon Jul 27 2009 Jiri Popelka <jpopelka@redhat.com> - 0.1-1
 - Get iwlib code from rhpl 0.222-1
