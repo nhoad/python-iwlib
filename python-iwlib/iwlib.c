@@ -17,6 +17,8 @@
 
 #include <errno.h>
 #include <unistd.h>
+#include <stdio.h>
+#include <string.h>
 #include <iwlib.h>
 #include <linux/sockios.h>
 
@@ -206,6 +208,7 @@ get_iwconfig (PyObject * self, PyObject * args)
   close(skfd);
 
   if (eno < 0) {
+    eno = -eno;
     sprintf(buffer, "get_info [Errno %d] %s", eno, strerror(eno));
     PyErr_SetString(PyExc_IOError, buffer);
     return NULL;
