@@ -216,25 +216,25 @@ get_iwconfig (PyObject * self, PyObject * args)
 
   dict = PyDict_New();
   if (info.b.has_mode)
-    PyDict_SetItem(dict, PyString_FromString("Mode"), 
-		   PyString_FromString(iw_operation_mode[info.b.mode]));
+    PyDict_SetItemString(dict, "Mode", 
+                         PyString_FromString(iw_operation_mode[info.b.mode]));
   if (info.b.essid_on) {
-    PyDict_SetItem(dict, PyString_FromString("ESSID"), PyString_FromString(info.b.essid));
+    PyDict_SetItemString(dict, "ESSID", PyString_FromString(info.b.essid));
   } else {
-    PyDict_SetItem(dict, PyString_FromString("ESSID"), PyString_FromString("Auto"));
+    PyDict_SetItemString(dict, "ESSID", PyString_FromString("Auto"));
   }
   if (info.b.has_nwid) {
     if(info.b.nwid.disabled)
-      PyDict_SetItem(dict, PyString_FromString("NWID"), PyString_FromString("Auto"));
+      PyDict_SetItemString(dict, "NWID", PyString_FromString("Auto"));
     else
-      PyDict_SetItem(dict, PyString_FromString("NWID"), PyString_FromFormat("%X", info.b.nwid.value));
+      PyDict_SetItemString(dict, "NWID", PyString_FromFormat("%X", info.b.nwid.value));
   }
 
   /* Display frequency / channel */
   if(info.b.has_freq)
     {
       iw_print_freq_value(buffer, sizeof(buffer), info.b.freq);
-      PyDict_SetItem(dict, PyString_FromString("Frequency"), PyString_FromString(buffer));
+      PyDict_SetItemString(dict, "Frequency", PyString_FromString(buffer));
     }
 
   /* Display the address of the current Access Point */
@@ -243,9 +243,9 @@ get_iwconfig (PyObject * self, PyObject * args)
       iw_saether_ntop((struct sockaddr *)info.ap_addr.sa_data, buffer);
       /* Oups ! No Access Point in Ad-Hoc mode */
       if((info.b.has_mode) && (info.b.mode == IW_MODE_ADHOC))
-	PyDict_SetItem(dict, PyString_FromString("Cell"), PyString_FromString(buffer));
+	PyDict_SetItemString(dict, "Cell", PyString_FromString(buffer));
       else
-	PyDict_SetItem(dict, PyString_FromString("Access Point"), PyString_FromString(buffer));
+	PyDict_SetItemString(dict, "Access Point", PyString_FromString(buffer));
     }
 
   /* Display the currently used/set bit-rate */
@@ -253,7 +253,7 @@ get_iwconfig (PyObject * self, PyObject * args)
     {
       /* Display it */
       iw_print_bitrate(buffer, sizeof(buffer), info.bitrate.value);
-      PyDict_SetItem(dict, PyString_FromString("BitRate"), PyString_FromString(buffer));
+      PyDict_SetItemString(dict, "BitRate", PyString_FromString(buffer));
 /*       printf("Bit Rate%c%s   ", (info.bitrate.fixed ? '=' : ':'), buffer); */
     }
 
@@ -262,12 +262,12 @@ get_iwconfig (PyObject * self, PyObject * args)
   if(info.b.has_key)
     {
       if((info.b.key_flags & IW_ENCODE_DISABLED) || (info.b.key_size == 0))
-	PyDict_SetItem(dict, PyString_FromString("Key"), PyString_FromString("off"));
+	PyDict_SetItemString(dict, "Key", PyString_FromString("off"));
       else
 	{
 	  /* Display the key */
 	  iw_print_key(buffer, sizeof(buffer), info.b.key, info.b.key_size, info.b.key_flags);
-	PyDict_SetItem(dict, PyString_FromString("Key"), PyString_FromString(buffer));
+	PyDict_SetItemString(dict, "Key", PyString_FromString(buffer));
 
   	} 
     }
