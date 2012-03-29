@@ -8,7 +8,7 @@ iwlib = Extension("iwlib",
 
 # don't reformat this line, Makefile parses it
 setup(name="iwlib",
-      version="1.1",
+      version="1.2",
       description="Python module to interface with iwlib",
       author="Harald Hoyer",
       author_email="harald@redhat.com",
