@@ -1,18 +1,41 @@
-#!/usr/bin/python2
+#!/usr/bin/env python2
 
-from distutils.core import setup, Extension
+import os
+import sys
 
-iwlib = Extension("iwlib",
-                  sources = ["python-iwlib/iwlib.c"],
-                  libraries=["iw"])
+try:
+    from distutils.core import setup, Extension, find_packages
+except ImportError:
+    from setuptools import setup, Extension, find_packages
 
-# don't reformat this line, Makefile parses it
-setup(name="iwlib",
-      version="1.2",
-      description="Python module to interface with iwlib",
-      author="Harald Hoyer",
-      author_email="harald@redhat.com",
-      url="http://git.fedorahosted.org/git/python-iwlib.git",
-      long_description = """The iwlib module provides functions to
-                            examine the wireless network devices installed on the system.""",
-      ext_modules=[iwlib])
+# Publish Helper.
+if sys.argv[-1] == 'publish':
+    os.system('python setup.py sdist upload')
+    sys.exit()
+
+iwlib = Extension("iwlib.iwscan",
+        sources=["iwlib/iwconfig.c"],
+        libraries=["iw"])
+
+settings = {
+    'name': 'iwlib',
+    'version': '1.2',
+    'description': "Python module to interface with iwlib",
+    'long_description': open('README.rst').read(),
+    'author': 'Nathan Hoad',
+    'author_email': 'nathan@getoffmalawn.com',
+    'url': 'https://bitbucket.org/getoffmalawn/python-iwlib',
+    'license': 'GPLv2',
+    'classifiers': (
+        # 'Development Status :: 5 - Production/Stable',
+        'Intended Audience :: Developers',
+        'Natural Language :: English',
+        'License :: OSI Approved :: GPLv2 License',
+        'Programming Language :: Python',
+        'Programming Language :: Python :: 2.7',
+    ),
+    'ext_modules': [iwlib],
+    'packages': find_packages(),
+}
+
+setup(**settings)
