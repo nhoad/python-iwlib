@@ -13,7 +13,7 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-iwlib = Extension("iwlib.iwscan",
+iwlib = Extension("iwlib.iwconfig",
         sources=["iwlib/iwconfig.c"],
         libraries=["iw"])
 

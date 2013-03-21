@@ -258,9 +258,9 @@ static struct PyMethodDef PyEthModuleMethods[] = {
     { NULL, NULL, 0, NULL }
 };
 
-void initiwscan(void) {
+void initiwconfig(void) {
     PyObject *m, *d;
 
-    m = Py_InitModule("iwscan", PyEthModuleMethods);
+    m = Py_InitModule("iwconfig", PyEthModuleMethods);
     d = PyModule_GetDict(m);
 }
