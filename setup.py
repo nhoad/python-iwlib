@@ -30,7 +30,7 @@ settings = {
         # 'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
-        'License :: OSI Approved :: GPLv2 License',
+        'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
     ),
