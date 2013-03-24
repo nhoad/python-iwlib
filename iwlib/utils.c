@@ -177,9 +177,14 @@ supports_scanning(PyObject *self, PyObject *args)
 
 static struct PyMethodDef PyEthModuleMethods[] = {
     { "get_max_quality",
-        (PyCFunction) get_max_quality, METH_VARARGS, NULL },
+        (PyCFunction) get_max_quality, METH_VARARGS,
+        "Return max quality of an interface. Useful for \
+\n\nworking out percentages of quality results from \
+\niwconfig.scan" },
     { "supports_scanning",
-        (PyCFunction) supports_scanning, METH_VARARGS, NULL },
+        (PyCFunction) supports_scanning, METH_VARARGS,
+        "Check if an interface supports scanning. \
+\n\nReturns true if the device supports scanning, False otherwise." },
     { NULL, NULL, 0, NULL }
 };
 

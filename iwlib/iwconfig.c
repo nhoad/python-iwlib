@@ -261,9 +261,16 @@ set_essid(PyObject *self, PyObject *args)
 
 static struct PyMethodDef PyEthModuleMethods[] = {
     { "get_iwconfig",
-        (PyCFunction) get_iwconfig, METH_VARARGS, NULL },
+        (PyCFunction) get_iwconfig, METH_VARARGS,
+        "Retrieve the current configuration of an interface. \
+\n\nArguments:\
+\n  - device to work on (e.g. eth1, wlan0)." },
     { "set_essid",
-        (PyCFunction) set_essid, METH_VARARGS, NULL },
+        (PyCFunction) set_essid, METH_VARARGS,
+        "Set the ESSID of an interface. \
+\n\nArguments:\
+\n  - device to work on (e.g. eth1, wlan0).\
+\n  - essid to set device to." },
     { NULL, NULL, 0, NULL }
 };
 

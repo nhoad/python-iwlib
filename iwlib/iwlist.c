@@ -86,7 +86,11 @@ scan(PyObject *self, PyObject *args)
 
 static struct PyMethodDef PyEthModuleMethods[] = {
     { "scan",
-        (PyCFunction) scan, METH_VARARGS, NULL },
+        (PyCFunction) scan, METH_VARARGS,
+        "Perform a scan for access points in the area. \
+\n\nArguments:\
+\n  - device to use for scanning on (e.g. eth1, wlan0)." },
+
     { NULL, NULL, 0, NULL }
 };
 
