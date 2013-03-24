@@ -193,9 +193,77 @@ get_iwconfig (PyObject * self, PyObject * args)
     return wireless_info_to_PyDict(&info);
 }
 
+static PyObject *
+set_essid(PyObject *self, PyObject *args)
+{
+    char *devname, *essid;
+    int sock;
+    int essid_len;
+    char buffer[1024];
+    struct iwreq wrq;
+    struct wireless_info info;
+    char essid_buf[IW_ESSID_MAX_SIZE+1];
+
+    if (!PyArg_ParseTuple(args, "ss", &devname, &essid)) {
+        return NULL;
+    }
+
+    essid_len = strlen(essid);
+
+    OPEN_IW(sock);
+
+    if((!strcasecmp(essid, "off")) || (!strcasecmp(essid, "any"))) {
+        wrq.u.essid.flags = 0;
+        essid_buf[0] = '\0';
+    } else if (!strcasecmp(essid, "on")) {
+        memset(essid_buf, '\0', sizeof(essid_buf));
+        wrq.u.essid.pointer = (caddr_t) essid_buf;
+        wrq.u.essid.length = IW_ESSID_MAX_SIZE + 1;
+        wrq.u.essid.flags = 0;
+        if(iw_get_ext(sock, devname, SIOCGIWESSID, &wrq) < 0) {
+            sprintf(buffer, "Error retrieving previous ESSID: %s",
+                strerror(errno));
+            goto error;
+        }
+        wrq.u.essid.flags = 1;
+    } else if(essid_len > IW_ESSID_MAX_SIZE) {
+        sprintf(buffer, "ESSID is longer than the maximum %d",
+            IW_ESSID_MAX_SIZE);
+        goto error;
+    } else {
+        memcpy(essid_buf, essid, essid_len);
+        essid_buf[essid_len] = '\0';
+        wrq.u.essid.flags = 1;
+    }
+
+    int we_kernel_version = iw_get_kernel_we_version();
+
+    wrq.u.essid.pointer = (caddr_t) essid_buf;
+    wrq.u.essid.length = strlen(essid_buf);
+    if(we_kernel_version < 21)
+        wrq.u.essid.length++;
+
+    if(iw_set_ext(sock, devname, SIOCSIWESSID, &wrq) < 0) {
+        sprintf(buffer, "Couldn't set essid on device '%s': %s", devname,
+            strerror(errno));
+        goto error;
+    }
+
+    iw_sockets_close(sock);
+    Py_INCREF(Py_None);
+    return Py_None;
+
+    error:
+    iw_sockets_close(sock);
+    PyErr_SetString(PyExc_OSError, buffer);
+    return NULL;
+}
+
 static struct PyMethodDef PyEthModuleMethods[] = {
     { "get_iwconfig",
         (PyCFunction) get_iwconfig, METH_VARARGS, NULL },
+    { "set_essid",
+        (PyCFunction) set_essid, METH_VARARGS, NULL },
     { NULL, NULL, 0, NULL }
 };
 
