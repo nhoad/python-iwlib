@@ -2,7 +2,7 @@
  * Copyright (C) 2009-2012 Red Hat, Inc.
  * Copyright (C) 2013 Nathan Hoad.
  *
- * Interface with iwlib from rhpl by Harald Hoyer <harald@redhat.com>.
+ * Interface with iwlib by Nathan Hoad <nathan@getoffmalawn.com>.
  *
  * This application is free software; you can redistribute it and/or modify it
  * under the terms of the GNU General Public License as published by the Free
