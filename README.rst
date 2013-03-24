@@ -26,8 +26,8 @@ Change History
 --------------
 
 1.3 (24th March 2013)
-    - Added `iwlib.utils module`. See documentation for details.
-    - Added `iwlib.iwlist module``. See documentation for details.
-    - Added function `set_essid`, to `iwlib.iwconfig`.
+    - Added ``iwlib.utils module``. See documentation for details.
+    - Added ``iwlib.iwlist module``. See documentation for details.
+    - Added function ``set_essid``, to ``iwlib.iwconfig``.
 1.2.1 (21st March 2013)
     - Initial release of code, as it was when I inherited it.
