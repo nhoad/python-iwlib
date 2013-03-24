@@ -13,13 +13,29 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
-iwlib = Extension("iwlib.iwconfig",
-        sources=["iwlib/iwconfig.c"],
+iwconfig = Extension("iwlib.iwconfig",
+        sources=['iwlib/utils.c', "iwlib/iwconfig.c"],
+        include_dirs=['iwlib'],
         libraries=["iw"])
+
+iwlist = Extension("iwlib.iwlist",
+        sources=['iwlib/utils.c', "iwlib/iwlist.c"],
+        include_dirs=['iwlib'],
+        libraries=["iw"])
+
+iwlist = Extension("iwlib.utils",
+        sources=['iwlib/utils.c'],
+        include_dirs=['iwlib'],
+        libraries=["iw"])
+
+ext_modules = [
+    iwconfig,
+    iwlist,
+]
 
 settings = {
     'name': 'iwlib',
-    'version': '1.2',
+    'version': '1.2.1',
     'description': "Python module to interface with iwlib",
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',
@@ -34,7 +50,7 @@ settings = {
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
     ),
-    'ext_modules': [iwlib],
+    'ext_modules': ext_modules,
     'packages': find_packages(),
 }
 
