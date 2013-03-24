@@ -25,7 +25,6 @@ wireless_config_to_PyDict(struct wireless_config *basic)
         PyDict_SetItemString(dict, "Mode",
                 PyString_FromString(iw_operation_mode[basic->mode]));
     if (basic->essid_on) {
-        printf("Essid %s\n", basic->essid);
         PyDict_SetItemString(dict, "ESSID", PyString_FromString(basic->essid));
     } else {
         PyDict_SetItemString(dict, "ESSID", PyString_FromString("Auto"));
@@ -113,9 +112,7 @@ wireless_scan_to_PyDict(struct wireless_scan *scan)
     }
 
     if (scan->has_stats) {
-        printf("Adding stats\n");
         add_wireless_stats_toPyDict(&scan->stats, dict);
-        printf("Done\n");
     }
 
     return dict;
