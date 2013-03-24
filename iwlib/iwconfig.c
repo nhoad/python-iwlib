@@ -1,5 +1,6 @@
 /*
- * Copyright (C) 2009 Red Hat Inc.
+ * Copyright (C) 2009-2012 Red Hat, Inc.
+ * Copyright (C) 2013 Nathan Hoad.
  *
  * Interface with iwlib from rhpl by Harald Hoyer <harald@redhat.com>.
  *
@@ -21,6 +22,8 @@
 #include <string.h>
 #include <iwlib.h>
 #include <linux/sockios.h>
+
+#include "utils.h"
 
 /*------------------------------------------------------------------*/
 /*
@@ -167,27 +170,18 @@ static PyObject *
 get_iwconfig (PyObject * self, PyObject * args)
 {
     char *devname;
-    int skfd;       /* generic raw socket desc. */
+    int skfd;
     char buffer[1024];
     int eno = 0;
-    struct wireless_info    info;
-    PyObject * dict;
+    struct wireless_info info;
 
     if (!PyArg_ParseTuple(args, "s", &devname)) {
         return NULL;
     }
 
-    /* Create a channel to the NET kernel. */
-    if((skfd = iw_sockets_open()) < 0) {
-        eno = errno;
-        sprintf(buffer, "iw_sockets_open [Errno %d] %s", eno, strerror(eno));
-        PyErr_SetString(PyExc_IOError, buffer);
-        return NULL;
-    }
-
+    OPEN_IW(skfd);
     eno = get_info(skfd, devname, &info);
-
-    close(skfd);
+    iw_sockets_close(skfd);
 
     if (eno < 0) {
         eno = -eno;
@@ -196,60 +190,7 @@ get_iwconfig (PyObject * self, PyObject * args)
         return NULL;
     }
 
-    dict = PyDict_New();
-    if (info.b.has_mode)
-        PyDict_SetItemString(dict, "Mode",
-                PyString_FromString(iw_operation_mode[info.b.mode]));
-    if (info.b.essid_on) {
-        PyDict_SetItemString(dict, "ESSID", PyString_FromString(info.b.essid));
-    } else {
-        PyDict_SetItemString(dict, "ESSID", PyString_FromString("Auto"));
-    }
-
-    if (info.b.has_nwid) {
-        if(info.b.nwid.disabled)
-            PyDict_SetItemString(dict, "NWID", PyString_FromString("Auto"));
-        else
-            PyDict_SetItemString(dict, "NWID", PyString_FromFormat("%X", info.b.nwid.value));
-    }
-
-    /* Display frequency / channel */
-    if(info.b.has_freq) {
-        iw_print_freq_value(buffer, sizeof(buffer), info.b.freq);
-        PyDict_SetItemString(dict, "Frequency", PyString_FromString(buffer));
-    }
-
-    /* Display the address of the current Access Point */
-    if(info.has_ap_addr) {
-        iw_saether_ntop((struct sockaddr *)info.ap_addr.sa_data, buffer);
-        /* Oups ! No Access Point in Ad-Hoc mode */
-        if((info.b.has_mode) && (info.b.mode == IW_MODE_ADHOC))
-            PyDict_SetItemString(dict, "Cell", PyString_FromString(buffer));
-        else
-            PyDict_SetItemString(dict, "Access Point", PyString_FromString(buffer));
-    }
-
-    /* Display the currently used/set bit-rate */
-    if(info.has_bitrate) {
-        /* Display it */
-        iw_print_bitrate(buffer, sizeof(buffer), info.bitrate.value);
-        PyDict_SetItemString(dict, "BitRate", PyString_FromString(buffer));
-        /*       printf("Bit Rate%c%s   ", (info.bitrate.fixed ? '=' : ':'), buffer); */
-    }
-
-    /* Display encryption information */
-    /* Note : we display only the "current" key, use iwlist to list all keys */
-    if(info.b.has_key) {
-        if((info.b.key_flags & IW_ENCODE_DISABLED) || (info.b.key_size == 0)) {
-            PyDict_SetItemString(dict, "Key", PyString_FromString("off"));
-        } else {
-            /* Display the key */
-            iw_print_key(buffer, sizeof(buffer), info.b.key, info.b.key_size, info.b.key_flags);
-            PyDict_SetItemString(dict, "Key", PyString_FromString(buffer));
-        }
-    }
-
-    return(dict);
+    return wireless_info_to_PyDict(&info);
 }
 
 static struct PyMethodDef PyEthModuleMethods[] = {
