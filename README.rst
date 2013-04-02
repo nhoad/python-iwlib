@@ -25,6 +25,9 @@ Installation requires a compiler recognised by Python::
 Change History
 --------------
 
+1.3.1 (2nd April 2013)
+    - Fixed packaging issue involving missing header files.
+
 1.3 (24th March 2013)
     - Added ``iwlib.utils module``. See documentation for details.
     - Added ``iwlib.iwlist module``. See documentation for details.

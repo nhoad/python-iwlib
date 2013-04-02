@@ -38,7 +38,7 @@ ext_modules = [
 
 settings = {
     'name': 'iwlib',
-    'version': '1.3',
+    'version': '1.3.1',
     'description': "Python module to interface with iwlib",
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',
