@@ -1,0 +1,8 @@
+include *.txt
+include MANIFEST.in
+include setup.py
+include AUTHORS
+include COPYING
+include README.rst
+
+recursive-include iwlib *.c *.h

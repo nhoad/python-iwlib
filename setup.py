@@ -13,20 +13,23 @@ if sys.argv[-1] == 'publish':
     os.system('python setup.py sdist upload')
     sys.exit()
 
+include_dirs = ['iwlib']
+libraries = ["iw"]
+
 iwconfig = Extension("iwlib.iwconfig",
         sources=['iwlib/utils.c', "iwlib/iwconfig.c"],
-        include_dirs=['iwlib'],
-        libraries=["iw"])
+        include_dirs=include_dirs,
+        libraries=libraries)
 
 iwlist = Extension("iwlib.iwlist",
         sources=['iwlib/utils.c', "iwlib/iwlist.c"],
-        include_dirs=['iwlib'],
-        libraries=["iw"])
+        include_dirs=include_dirs,
+        libraries=libraries)
 
 iwlist = Extension("iwlib.utils",
         sources=['iwlib/utils.c'],
-        include_dirs=['iwlib'],
-        libraries=["iw"])
+        include_dirs=include_dirs,
+        libraries=libraries)
 
 ext_modules = [
     iwconfig,
