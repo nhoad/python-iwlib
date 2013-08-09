@@ -18,7 +18,9 @@ http://www.hpl.hp.com/personal/Jean_Tourrilhes/Linux/Tools.html
 Installation
 ------------
 
-Installation requires a compiler recognised by Python::
+Installation requires the Python developer tools, and wireless_tools package
+for compilation. If Python.h and iwlib.h exist on your system, you should be
+good to go.
 
     $ pip install iwlib
 

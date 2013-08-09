@@ -1,4 +1,3 @@
-include *.txt
 include MANIFEST.in
 include setup.py
 include AUTHORS
