@@ -16,24 +16,15 @@ if sys.argv[-1] == 'publish':
 include_dirs = ['iwlib']
 libraries = ["iw"]
 
-iwconfig = Extension("iwlib.iwconfig",
-        sources=['iwlib/utils.c', "iwlib/iwconfig.c"],
-        include_dirs=include_dirs,
-        libraries=libraries)
-
-iwlist = Extension("iwlib.iwlist",
-        sources=['iwlib/utils.c', "iwlib/iwlist.c"],
-        include_dirs=include_dirs,
-        libraries=libraries)
-
-iwlist = Extension("iwlib.utils",
-        sources=['iwlib/utils.c'],
-        include_dirs=include_dirs,
-        libraries=libraries)
-
 ext_modules = [
-    iwconfig,
-    iwlist,
+    Extension("iwlib.iwconfig", sources=['iwlib/utils.c', 'iwlib/iwconfig.c'],
+              include_dirs=include_dirs, libraries=libraries),
+
+    Extension("iwlib.iwlist", sources=['iwlib/iwlist.c', 'iwlib/utils.c'],
+              include_dirs=include_dirs, libraries=libraries),
+
+    Extension("iwlib.utils", sources=['iwlib/utils.c'],
+              include_dirs=include_dirs, libraries=libraries),
 ]
 
 settings = {
