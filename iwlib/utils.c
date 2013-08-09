@@ -20,50 +20,64 @@ PyObject*
 wireless_config_to_PyDict(struct wireless_config *basic)
 {
     char buffer[1024];
-    PyObject *dict = PyDict_New();
+    PyObject *dict;
+
+    if ((dict = PyDict_New()) == NULL)
+        return NULL;
+
     if (basic->has_mode)
-        PyDict_SetItemString(dict, "Mode",
-                PyString_FromString(iw_operation_mode[basic->mode]));
+        SAFE_SETITEMSTRING(dict, "Mode", PyString_FromString(iw_operation_mode[basic->mode]));
+
     if (basic->essid_on) {
-        PyDict_SetItemString(dict, "ESSID", PyString_FromString(basic->essid));
+        SAFE_SETITEMSTRING(dict, "ESSID", PyString_FromString(basic->essid));
     } else {
-        PyDict_SetItemString(dict, "ESSID", PyString_FromString("Auto"));
+        SAFE_SETITEMSTRING(dict, "ESSID", PyString_FromString("Auto"));
     }
 
     if (basic->has_nwid) {
-        if(basic->nwid.disabled)
-            PyDict_SetItemString(dict, "NWID", PyString_FromString("Auto"));
-        else {
-            PyDict_SetItemString(dict, "NWID", PyString_FromFormat("%X", basic->nwid.value));
+        if(basic->nwid.disabled) {
+            SAFE_SETITEMSTRING(dict, "NWID", PyString_FromString("Auto"));
+        } else {
+            SAFE_SETITEMSTRING(dict, "NWID",
+                PyString_FromFormat("%X", basic->nwid.value));
         }
     }
 
     if(basic->has_freq) {
         iw_print_freq_value(buffer, sizeof(buffer), basic->freq);
-        PyDict_SetItemString(dict, "Frequency", PyString_FromString(buffer));
+        SAFE_SETITEMSTRING(dict, "Frequency", PyString_FromString(buffer));
     }
 
-    // FIXME: This is known to be incorrect for wireless_scan structs.
+    /* FIXME: This is known to be incorrect for wireless_scan structs. */
     if(basic->has_key) {
         if((basic->key_flags & IW_ENCODE_DISABLED) || (basic->key_size == 0)) {
-            PyDict_SetItemString(dict, "Key", PyString_FromString("off"));
+            SAFE_SETITEMSTRING(dict, "Key", PyString_FromString("off"));
         } else {
             iw_print_key(buffer, sizeof(buffer), basic->key, basic->key_size, basic->key_flags);
-            PyDict_SetItemString(dict, "Key", PyString_FromString(buffer));
+            SAFE_SETITEMSTRING(dict, "Key", PyString_FromString(buffer));
         }
     }
     return dict;
 }
 
+void
 add_wireless_stats_toPyDict(iwstats *stats, PyObject *dict) {
-    PyObject *quality = PyDict_New();
+    PyObject *quality;
+    PyObject *tmp;
 
-    PyDict_SetItemString(quality, "quality", Py_BuildValue("i", stats->qual.qual));
-    PyDict_SetItemString(quality, "level", Py_BuildValue("i", stats->qual.level));
-    PyDict_SetItemString(quality, "noise", Py_BuildValue("i", stats->qual.noise));
-    PyDict_SetItemString(quality, "updated", Py_BuildValue("i", stats->qual.updated));
+    if (!dict || !stats) {
+        return;
+    }
 
-    PyDict_SetItemString(dict, "stats", quality);
+    if ((quality = PyDict_New()) == NULL)
+        return;
+
+    SAFE_SETITEMSTRING(quality, "quality", Py_BuildValue("i", stats->qual.qual));
+    SAFE_SETITEMSTRING(quality, "level", Py_BuildValue("i", stats->qual.level));
+    SAFE_SETITEMSTRING(quality, "noise", Py_BuildValue("i", stats->qual.noise));
+    SAFE_SETITEMSTRING(quality, "updated", Py_BuildValue("i", stats->qual.updated));
+
+    SAFE_SETITEMSTRING(dict, "stats", quality);
 }
 
 PyObject*
@@ -75,14 +89,14 @@ wireless_info_to_PyDict(struct wireless_info *info)
     if(info->has_ap_addr) {
         iw_saether_ntop((struct sockaddr *)info->ap_addr.sa_data, buffer);
         if((info->b.has_mode) && (info->b.mode == IW_MODE_ADHOC))
-            PyDict_SetItemString(dict, "Cell", PyString_FromString(buffer));
+            SAFE_SETITEMSTRING(dict, "Cell", PyString_FromString(buffer));
         else
-            PyDict_SetItemString(dict, "Access Point", PyString_FromString(buffer));
+            SAFE_SETITEMSTRING(dict, "Access Point", PyString_FromString(buffer));
     }
 
     if(info->has_bitrate) {
         iw_print_bitrate(buffer, sizeof(buffer), info->bitrate.value);
-        PyDict_SetItemString(dict, "BitRate", PyString_FromString(buffer));
+        SAFE_SETITEMSTRING(dict, "BitRate", PyString_FromString(buffer));
     }
 
     if (info->has_stats) {
@@ -96,19 +110,22 @@ PyObject*
 wireless_scan_to_PyDict(struct wireless_scan *scan)
 {
     char buffer[1024];
-    PyObject *dict = wireless_config_to_PyDict(&scan->b);
+    PyObject *dict;
+
+    if ((dict = wireless_config_to_PyDict(&scan->b)) == NULL)
+        return NULL;
 
     if(scan->has_ap_addr) {
         iw_saether_ntop((struct sockaddr *)scan->ap_addr.sa_data, buffer);
         if((scan->b.has_mode) && (scan->b.mode == IW_MODE_ADHOC))
-            PyDict_SetItemString(dict, "Cell", PyString_FromString(buffer));
+            SAFE_SETITEMSTRING(dict, "Cell", PyString_FromString(buffer));
         else
-            PyDict_SetItemString(dict, "Access Point", PyString_FromString(buffer));
+            SAFE_SETITEMSTRING(dict, "Access Point", PyString_FromString(buffer));
     }
 
     if(scan->has_maxbitrate) {
         iw_print_bitrate(buffer, sizeof(buffer), scan->maxbitrate.value);
-        PyDict_SetItemString(dict, "BitRate", PyString_FromString(buffer));
+        SAFE_SETITEMSTRING(dict, "BitRate", PyString_FromString(buffer));
     }
 
     if (scan->has_stats) {
@@ -118,12 +135,12 @@ wireless_scan_to_PyDict(struct wireless_scan *scan)
     return dict;
 }
 
-// XXX All functions below are exported to iwlib.utils
+/* XXX All functions below are exported to iwlib.utils */
 
 PyObject *
 get_max_quality(PyObject *self, PyObject *args)
 {
-    char *devname;
+    const char *devname;
     char buffer[1024];
     int has_range;
     int sock;
@@ -150,7 +167,7 @@ get_max_quality(PyObject *self, PyObject *args)
 PyObject *
 supports_scanning(PyObject *self, PyObject *args)
 {
-    char *devname;
+    const char *devname;
     int has_range;
     int sock;
     struct iw_range range;
@@ -189,8 +206,8 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 };
 
 void initutils(void) {
-    PyObject *m, *d;
+    PyObject *m;
 
     m = Py_InitModule("utils", PyEthModuleMethods);
-    d = PyModule_GetDict(m);
+    PyModule_GetDict(m);
 }
