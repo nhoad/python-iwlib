@@ -279,5 +279,5 @@ void initiwconfig(void) {
     PyObject *m, *d;
 
     m = Py_InitModule("iwconfig", PyEthModuleMethods);
-    d = PyModule_GetDict(m);
+    PyModule_GetDict(m);
 }

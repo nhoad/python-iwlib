@@ -103,6 +103,6 @@ void initiwlist(void) {
     PyObject *m, *d;
 
     m = Py_InitModule("iwlist", PyEthModuleMethods);
-    d = PyModule_GetDict(m);
+    PyModule_GetDict(m);
 }
 
