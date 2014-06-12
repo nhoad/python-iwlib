@@ -28,7 +28,10 @@ Change History
 --------------
 
 1.4 (12th June 2014)
+    - Fixed incompatibility with wireless_tools version 30.pre9
     - Fixed build error that resulted in iwconfig and iwlist not being built.
+    - Minor cleanups
+    - Feels "snappier"
 
 1.3.1 (2nd April 2013)
     - Fixed packaging issue involving missing header files.
@@ -37,5 +40,6 @@ Change History
     - Added ``iwlib.utils module``. See documentation for details.
     - Added ``iwlib.iwlist module``. See documentation for details.
     - Added function ``set_essid``, to ``iwlib.iwconfig``.
+
 1.2.1 (21st March 2013)
     - Initial release of code, as it was when I inherited it.
