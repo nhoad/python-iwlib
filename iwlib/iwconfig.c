@@ -196,13 +196,13 @@ get_iwconfig (PyObject * self, PyObject * args)
 static PyObject *
 set_essid(PyObject *self, PyObject *args)
 {
-    const char *devname, *essid;
-    int sock;
-    int essid_len;
     char buffer[1024];
-    struct iwreq wrq;
-    struct wireless_info info;
     char essid_buf[IW_ESSID_MAX_SIZE+1];
+    const char *devname, *essid;
+    int essid_len;
+    int sock;
+    int we_kernel_version;
+    struct iwreq wrq;
 
     if (!PyArg_ParseTuple(args, "ss", &devname, &essid)) {
         return NULL;
@@ -236,7 +236,6 @@ set_essid(PyObject *self, PyObject *args)
         wrq.u.essid.flags = 1;
     }
 
-    int we_kernel_version;
     we_kernel_version = iw_get_kernel_we_version();
 
     wrq.u.essid.pointer = (caddr_t) essid_buf;
@@ -276,7 +275,7 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 };
 
 void initiwconfig(void) {
-    PyObject *m, *d;
+    PyObject *m;
 
     m = Py_InitModule("iwconfig", PyEthModuleMethods);
     PyModule_GetDict(m);

@@ -29,15 +29,13 @@
 static PyObject *
 scan(PyObject *self, PyObject *args)
 {
-    PyObject *dict;
+    PyObject *dict, *list;
     char *devname;
     char buffer[1024];
     int has_range;
     int sock;
     struct iw_range range;
-    struct wireless_info info;
-    struct iwreq wrq;
-    PyObject *list;
+    struct wireless_scan *cur, *prev = NULL;
     wireless_scan_head head;
 
     if (!PyArg_ParseTuple(args, "s", &devname)) {
@@ -64,9 +62,7 @@ scan(PyObject *self, PyObject *args)
         return NULL;
     };
 
-    struct wireless_scan *cur = head.result;
-    struct wireless_scan *prev = NULL;
-
+    cur = head.result;
     while (cur != NULL) {
         if ((dict = wireless_scan_to_PyDict(cur)) == NULL) {
             iw_sockets_close(sock);
@@ -100,7 +96,7 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 };
 
 void initiwlist(void) {
-    PyObject *m, *d;
+    PyObject *m;
 
     m = Py_InitModule("iwlist", PyEthModuleMethods);
     PyModule_GetDict(m);
