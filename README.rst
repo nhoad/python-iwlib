@@ -27,6 +27,9 @@ good to go.
 Change History
 --------------
 
+1.4 (12th June 2014)
+    - Fixed build error that resulted in iwconfig and iwlist not being built.
+
 1.3.1 (2nd April 2013)
     - Fixed packaging issue involving missing header files.
 
