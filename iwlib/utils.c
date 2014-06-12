@@ -87,7 +87,7 @@ wireless_info_to_PyDict(struct wireless_info *info)
     PyObject *dict = wireless_config_to_PyDict(&info->b);
 
     if(info->has_ap_addr) {
-        iw_saether_ntop((struct sockaddr *)info->ap_addr.sa_data, buffer);
+        iw_ether_ntop((struct ether_addr *)info->ap_addr.sa_data, buffer);
         if((info->b.has_mode) && (info->b.mode == IW_MODE_ADHOC))
             SAFE_SETITEMSTRING(dict, "Cell", PyString_FromString(buffer));
         else
@@ -116,7 +116,7 @@ wireless_scan_to_PyDict(struct wireless_scan *scan)
         return NULL;
 
     if(scan->has_ap_addr) {
-        iw_saether_ntop((struct sockaddr *)scan->ap_addr.sa_data, buffer);
+        iw_ether_ntop((struct ether_addr *)scan->ap_addr.sa_data, buffer);
         if((scan->b.has_mode) && (scan->b.mode == IW_MODE_ADHOC))
             SAFE_SETITEMSTRING(dict, "Cell", PyString_FromString(buffer));
         else
