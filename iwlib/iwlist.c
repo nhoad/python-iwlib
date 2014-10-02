@@ -95,6 +95,23 @@ static struct PyMethodDef PyEthModuleMethods[] = {
     { NULL, NULL, 0, NULL }
 };
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef iwlist = {
+        PyModuleDef_HEAD_INIT,
+        "iwlist",
+        NULL, // Documentation
+        -1,
+        PyEthModuleMethods
+};
+
+PyMODINIT_FUNC
+PyInit_iwlist(void) {
+    return PyModule_Create(&iwlist);
+}
+
+#else
+
 void initiwlist(void) {
     PyObject *m;
 
@@ -102,3 +119,4 @@ void initiwlist(void) {
     PyModule_GetDict(m);
 }
 
+#endif

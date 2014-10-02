@@ -1,2 +1,2 @@
 # for backwards compatibility
-from .iwconfig import get_iwconfig
+from iwlib.iwconfig import get_iwconfig

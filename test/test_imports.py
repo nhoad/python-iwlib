@@ -1,3 +1,5 @@
+from __future__ import print_function
+
 def test_imports_dont_fail():
     '''Gross test for ensuring packaging hasn't been broken.'''
     imports = [
@@ -10,7 +12,7 @@ def test_imports_dont_fail():
 
     for imp in imports:
         module, _from = imp.rsplit('.', 1)
-        print 'from %s import %s' % (module, _from)
+        print('from %s import %s' % (module, _from))
         __import__(module, fromlist=[_from])
 
 
