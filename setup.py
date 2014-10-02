@@ -29,7 +29,7 @@ ext_modules = [
 
 settings = {
     'name': 'iwlib',
-    'version': '1.4',
+    'version': '1.5',
     'description': "Python module to interface with iwlib",
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',
@@ -43,6 +43,7 @@ settings = {
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Programming Language :: Python',
         'Programming Language :: Python :: 2.7',
+        'Programming Language :: Python :: 3',
     ),
     'ext_modules': ext_modules,
     'packages': find_packages(),
