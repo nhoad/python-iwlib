@@ -71,7 +71,6 @@ wireless_config_to_PyDict(struct wireless_config *basic)
 void
 add_wireless_stats_toPyDict(iwstats *stats, PyObject *dict) {
     PyObject *quality;
-    PyObject *tmp;
 
     if (!dict || !stats) {
         return;
