@@ -21,7 +21,7 @@
 #define PY_FROMFORMAT(X, Y) PyBytes_FromFormat( (X), (Y) )
 #else
 #define PY_FROMSTRING(X) PyString_FromString( (X) )
-#define PY_FROMFORMAT(X) PyString_FromFormat( (X) )
+#define PY_FROMFORMAT(X, Y) PyString_FromFormat( (X), (Y) )
 #endif
 
 PyObject*
