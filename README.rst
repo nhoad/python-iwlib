@@ -27,6 +27,9 @@ good to go.
 Change History
 --------------
 
+1.5 (1st October 2014)
+    - Added support for Python 3
+
 1.4 (12th June 2014)
     - Fixed incompatibility with wireless_tools version 30.pre9
     - Fixed build error that resulted in iwconfig and iwlist not being built.

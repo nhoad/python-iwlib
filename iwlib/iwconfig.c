@@ -274,9 +274,27 @@ static struct PyMethodDef PyEthModuleMethods[] = {
     { NULL, NULL, 0, NULL }
 };
 
+#if PY_MAJOR_VERSION >= 3
+
+static struct PyModuleDef iwconfig = {
+        PyModuleDef_HEAD_INIT,
+        "iwconfig",
+        NULL, // Documentation
+        -1,
+        PyEthModuleMethods
+};
+
+PyMODINIT_FUNC
+PyInit_iwconfig(void) {
+    return PyModule_Create(&iwconfig);
+}
+
+#else // Python2
+
 void initiwconfig(void) {
     PyObject *m;
-
     m = Py_InitModule("iwconfig", PyEthModuleMethods);
     PyModule_GetDict(m);
 }
+
+#endif
