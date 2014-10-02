@@ -34,7 +34,7 @@ settings = {
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',
     'author_email': 'nathan@getoffmalawn.com',
-    'url': 'https://bitbucket.org/getoffmalawn/python-iwlib',
+    'url': 'https://github.com/nathan-hoad/python-iwlib',
     'license': 'GPLv2',
     'classifiers': (
         # 'Development Status :: 5 - Production/Stable',
