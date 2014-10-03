@@ -229,9 +229,11 @@ PyInit_utils(void) {
 
 #else /* Python2 */
 
-void initutils(void) {
+void
+initutils(void) {
     PyObject *m;
     m = Py_InitModule("utils", PyEthModuleMethods);
     PyModule_GetDict(m);
 }
+
 #endif

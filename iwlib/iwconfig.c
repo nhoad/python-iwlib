@@ -291,7 +291,8 @@ PyInit_iwconfig(void) {
 
 #else /* Python2 */
 
-void initiwconfig(void) {
+void
+initiwconfig(void) {
     PyObject *m;
     m = Py_InitModule("iwconfig", PyEthModuleMethods);
     PyModule_GetDict(m);
