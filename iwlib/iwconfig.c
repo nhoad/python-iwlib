@@ -279,7 +279,7 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 static struct PyModuleDef iwconfig = {
         PyModuleDef_HEAD_INIT,
         "iwconfig",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -289,7 +289,7 @@ PyInit_iwconfig(void) {
     return PyModule_Create(&iwconfig);
 }
 
-#else // Python2
+#else /* Python2 */
 
 void initiwconfig(void) {
     PyObject *m;

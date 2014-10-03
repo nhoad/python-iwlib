@@ -217,7 +217,7 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 static struct PyModuleDef utilsmodule = {
         PyModuleDef_HEAD_INIT,
         "utils",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -227,7 +227,7 @@ PyInit_utils(void) {
     return PyModule_Create(&utilsmodule);
 }
 
-#else // Python2
+#else /* Python2 */
 
 void initutils(void) {
     PyObject *m;

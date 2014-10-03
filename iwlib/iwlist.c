@@ -100,7 +100,7 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 static struct PyModuleDef iwlist = {
         PyModuleDef_HEAD_INIT,
         "iwlist",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -110,7 +110,7 @@ PyInit_iwlist(void) {
     return PyModule_Create(&iwlist);
 }
 
-#else
+#else /* Python 2 */
 
 void initiwlist(void) {
     PyObject *m;
