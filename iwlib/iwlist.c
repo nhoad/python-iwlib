@@ -112,7 +112,8 @@ PyInit_iwlist(void) {
 
 #else /* Python 2 */
 
-void initiwlist(void) {
+void
+initiwlist(void) {
     PyObject *m;
 
     m = Py_InitModule("iwlist", PyEthModuleMethods);
