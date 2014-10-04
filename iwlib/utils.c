@@ -201,10 +201,10 @@ static struct PyMethodDef PyEthModuleMethods[] = {
         (PyCFunction) supports_scanning, METH_VARARGS,
         "Check if an interface supports scanning. \
 \n\nReturns true if the device supports scanning, False otherwise." },
-    { NULL, NULL, 0, NULL }
+    { NULL, NULL, 0, NULL } /* sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
+#if PY_MAJOR_VERSION >= 3 /* Python 3 */
 
 static struct PyModuleDef utilsmodule = {
         PyModuleDef_HEAD_INIT,
