@@ -16,14 +16,6 @@
 
 #include "utils.h"
 
-#if PY_MAJOR_VERSION >= 3
-#define PY_FROMSTRING(X) PyBytes_FromString( (X) )
-#define PY_FROMFORMAT(X, Y) PyBytes_FromFormat( (X), (Y) )
-#else
-#define PY_FROMSTRING(X) PyString_FromString( (X) )
-#define PY_FROMFORMAT(X, Y) PyString_FromFormat( (X), (Y) )
-#endif
-
 PyObject*
 wireless_config_to_PyDict(struct wireless_config *basic)
 {
