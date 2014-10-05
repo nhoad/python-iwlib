@@ -271,15 +271,15 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 \n\nArguments:\
 \n  - device to work on (e.g. eth1, wlan0).\
 \n  - essid to set device to." },
-    { NULL, NULL, 0, NULL }
+    { NULL, NULL, 0, NULL } /* sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
+#if PY_MAJOR_VERSION >= 3 /* Python 3 */
 
 static struct PyModuleDef iwconfig = {
         PyModuleDef_HEAD_INIT,
         "iwconfig",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -289,9 +289,10 @@ PyInit_iwconfig(void) {
     return PyModule_Create(&iwconfig);
 }
 
-#else // Python2
+#else /* Python2 */
 
-void initiwconfig(void) {
+void
+initiwconfig(void) {
     PyObject *m;
     m = Py_InitModule("iwconfig", PyEthModuleMethods);
     PyModule_GetDict(m);

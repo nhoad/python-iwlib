@@ -92,15 +92,15 @@ static struct PyMethodDef PyEthModuleMethods[] = {
 \n\nArguments:\
 \n  - device to use for scanning on (e.g. eth1, wlan0)." },
 
-    { NULL, NULL, 0, NULL }
+    { NULL, NULL, 0, NULL } /* sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
+#if PY_MAJOR_VERSION >= 3 /* Python 3 */
 
 static struct PyModuleDef iwlist = {
         PyModuleDef_HEAD_INIT,
         "iwlist",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -110,9 +110,10 @@ PyInit_iwlist(void) {
     return PyModule_Create(&iwlist);
 }
 
-#else
+#else /* Python 2 */
 
-void initiwlist(void) {
+void
+initiwlist(void) {
     PyObject *m;
 
     m = Py_InitModule("iwlist", PyEthModuleMethods);

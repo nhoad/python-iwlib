@@ -16,14 +16,6 @@
 
 #include "utils.h"
 
-#if PY_MAJOR_VERSION >= 3
-#define PY_FROMSTRING(X) PyBytes_FromString( (X) )
-#define PY_FROMFORMAT(X, Y) PyBytes_FromFormat( (X), (Y) )
-#else
-#define PY_FROMSTRING(X) PyString_FromString( (X) )
-#define PY_FROMFORMAT(X, Y) PyString_FromFormat( (X), (Y) )
-#endif
-
 PyObject*
 wireless_config_to_PyDict(struct wireless_config *basic)
 {
@@ -209,15 +201,15 @@ static struct PyMethodDef PyEthModuleMethods[] = {
         (PyCFunction) supports_scanning, METH_VARARGS,
         "Check if an interface supports scanning. \
 \n\nReturns true if the device supports scanning, False otherwise." },
-    { NULL, NULL, 0, NULL }
+    { NULL, NULL, 0, NULL } /* sentinel */
 };
 
-#if PY_MAJOR_VERSION >= 3
+#if PY_MAJOR_VERSION >= 3 /* Python 3 */
 
 static struct PyModuleDef utilsmodule = {
         PyModuleDef_HEAD_INIT,
         "utils",
-        NULL, // Documentation
+        NULL, /* Documentation */
         -1,
         PyEthModuleMethods
 };
@@ -227,11 +219,13 @@ PyInit_utils(void) {
     return PyModule_Create(&utilsmodule);
 }
 
-#else // Python2
+#else /* Python2 */
 
-void initutils(void) {
+void
+initutils(void) {
     PyObject *m;
     m = Py_InitModule("utils", PyEthModuleMethods);
     PyModule_GetDict(m);
 }
+
 #endif
