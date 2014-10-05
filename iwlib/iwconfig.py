@@ -15,7 +15,7 @@
 import os
 import errno
 
-from .utils import _parse_stats, _get_bytes
+from .utils import _parse_stats, _get_bytes, iwlib_socket
 from ._iwlib import iwlib, ffi
 
 
@@ -26,11 +26,14 @@ def get_iwconfig(interface):
     Arguments:
         interface - device to work on (e.g. eth1, wlan0).
     """
+    with iwlib_socket() as sock:
+        return _get_iwconfig(interface, sock)
+
+
+def _get_iwconfig(interface, sock):
     interface = _get_bytes(interface)
 
     wrq = ffi.new('struct iwreq*')
-
-    sock = iwlib.iw_sockets_open()
 
     iwconfig = {}
 
@@ -117,8 +120,6 @@ def get_iwconfig(interface):
     if iwlib.iw_get_stats(sock, interface, stats, range, has_range) >= 0:
         iwconfig[b'stats'] = _parse_stats(stats)
 
-    iwlib.iw_sockets_close(sock)
-
     return iwconfig
 
 
@@ -136,12 +137,7 @@ def set_essid(interface, essid):
 
     wrq = ffi.new('struct iwreq*')
 
-    sock = iwlib.iw_sockets_open()
-
-    if sock < 0:
-        raise OSError(ffi.errno, os.strerror(ffi.errno))
-
-    try:
+    with iwlib_socket() as sock:
         if essid.lower() in (b'off', b'any'):
             wrq.u.essid.flags = 0
             essid = b''
@@ -167,5 +163,3 @@ def set_essid(interface, essid):
             errno = ffi.errno
             strerror = "Couldn't set essid on device '%s': %s" % (interface.decode('utf8'), os.strerror(errno))
             raise OSError(errno, strerror)
-    finally:
-        iwlib.iw_sockets_close(sock)

@@ -12,10 +12,28 @@
 # MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
 # General Public License for more details.
 
+import contextlib
 import errno
 import os
 
 from ._iwlib import iwlib, ffi
+
+
+@contextlib.contextmanager
+def iwlib_socket(sock=None):
+    if sock is None:
+        closing = True
+        sock = iwlib.iw_sockets_open()
+    else:
+        closing = False
+
+    if sock < 0:
+        raise OSError(ffi.errno, os.strerror(ffi.errno))
+
+    yield sock
+
+    if closing:
+        iwlib.iw_sockets_close(sock)
 
 
 def get_max_quality(interface):
@@ -44,17 +62,8 @@ def _get_range_info(interface, sock=None):
     interface = _get_bytes(interface)
     range = ffi.new('struct iw_range *')
 
-    if sock is None:
-        sock = iwlib.iw_sockets_open()
-        close = True
-    else:
-        close = False
-
-    try:
+    with iwlib_socket(sock=sock) as sock:
         has_range = iwlib.iw_get_range_info(sock, interface, range) >= 0
-    finally:
-        if close:
-            iwlib.iw_sockets_close(sock)
 
     if not has_range or range.we_version_compiled < 14:
         err = errno.ENOTSUP
