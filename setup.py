@@ -3,10 +3,8 @@
 import os
 import sys
 
-try:
-    from distutils.core import setup, Extension, find_packages
-except ImportError:
-    from setuptools import setup, Extension, find_packages
+from setuptools import setup
+from distutils.command.build import build
 
 # Publish Helper.
 if sys.argv[-1] == 'publish':
@@ -14,22 +12,20 @@ if sys.argv[-1] == 'publish':
     sys.exit()
 
 include_dirs = ['iwlib']
-libraries = ["iw"]
 
-ext_modules = [
-    Extension("iwlib.iwconfig", sources=['iwlib/utils.c', 'iwlib/iwconfig.c'],
-              include_dirs=include_dirs, libraries=libraries),
 
-    Extension("iwlib.iwlist", sources=['iwlib/iwlist.c', 'iwlib/utils.c'],
-              include_dirs=include_dirs, libraries=libraries),
+class cffi_build(build):
+    def finalize_options(self):
+        from iwlib import _iwlib
+        ext_modules = [_iwlib.ffi.verifier.get_extension('iwlib')]
+        self.distribution.ext_modules = ext_modules
+        build.finalize_options(self)
 
-    Extension("iwlib.utils", sources=['iwlib/utils.c'],
-              include_dirs=include_dirs, libraries=libraries),
-]
+dependencies = ['cffi']
 
 settings = {
     'name': 'iwlib',
-    'version': '1.5',
+    'version': '1.6',
     'description': "Python module to interface with iwlib",
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',
@@ -42,11 +38,16 @@ settings = {
         'Natural Language :: English',
         'License :: OSI Approved :: GNU General Public License v2 (GPLv2)',
         'Programming Language :: Python',
+        'Programming Language :: Python :: 2.6',
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: PyPy',
     ),
-    'ext_modules': ext_modules,
-    'packages': find_packages(),
+    'zip_safe': False,
+    'packages': ['iwlib'],
+    'install_requires': dependencies,
+    'setup_requires': dependencies,
+    'cmdclass': {'build': build},
 }
 
 setup(**settings)
