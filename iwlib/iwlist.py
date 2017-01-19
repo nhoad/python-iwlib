@@ -14,7 +14,7 @@
 
 import os
 
-from .utils import _get_range_info, _parse_stats, _get_bytes
+from .utils import _get_range_info, _parse_stats, _get_bytes, iwlib_socket
 from ._iwlib import ffi, lib as iwlib
 
 
@@ -27,14 +27,14 @@ def scan(interface):
     interface = _get_bytes(interface)
 
     head = ffi.new('wireless_scan_head *')
-    sock = iwlib.iw_sockets_open()
 
-    range = _get_range_info(interface, sock=sock)
+    with iwlib_socket() as sock:
+        range = _get_range_info(interface, sock=sock)
 
-    if iwlib.iw_scan(sock, interface, range.we_version_compiled, head) != 0:
-        errno = ffi.errno
-        strerror = "Error while scanning: %s" % os.strerror(errno)
-        raise OSError(errno, strerror)
+        if iwlib.iw_scan(sock, interface, range.we_version_compiled, head) != 0:
+            errno = ffi.errno
+            strerror = "Error while scanning: %s" % os.strerror(errno)
+            raise OSError(errno, strerror)
 
     results = []
 
