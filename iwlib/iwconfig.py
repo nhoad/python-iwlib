@@ -59,7 +59,7 @@ def _get_iwconfig(interface, sock):
         else:
             iwconfig[b'NWID'] = ('%x' % (wrq.u.nwid.value)).encode('utf8')
 
-    buf = ffi.new('char []', b'\0' * 1024)
+    buf = ffi.new('char []', 1024)
 
     if get_ext(iwlib.SIOCGIWFREQ):
         freq = iwlib.iw_freq2float(ffi.addressof(wrq.u.freq))
@@ -83,7 +83,7 @@ def _get_iwconfig(interface, sock):
         iwlib.iw_print_bitrate(buf, len(buf), wrq.u.bitrate.value)
         iwconfig[b'BitRate'] = ffi.string(buf)
 
-    buf = ffi.new('char []', b'\0' * 1024)  # faster to zero out maybe?
+    buf = ffi.new('char []', 1024)
     wrq.u.data.pointer = buf
     wrq.u.data.length = iwlib.IW_ENCODING_TOKEN_MAX
     wrq.u.data.flags = 0
@@ -94,11 +94,11 @@ def _get_iwconfig(interface, sock):
         if flags & iwlib.IW_ENCODE_DISABLED or not key_size:
             iwconfig[b'Key'] = b'off'
         else:
-            key = ffi.new('char []', b'\0' * 1024)
+            key = ffi.new('char []', 1024)
             iwlib.iw_print_key(key, len(key), buf, key_size, flags)
             iwconfig[b'Key'] = ffi.string(key)
 
-    essid = ffi.new('char []', b'\0' * (iwlib.IW_ESSID_MAX_SIZE+1))
+    essid = ffi.new('char []', iwlib.IW_ESSID_MAX_SIZE+1)
     wrq.u.essid.pointer = essid
     wrq.u.essid.length = iwlib.IW_ESSID_MAX_SIZE + 1
     wrq.u.essid.flags = 0
@@ -142,7 +142,7 @@ def set_essid(interface, essid):
             wrq.u.essid.flags = 0
             essid = b''
         elif essid.lower() == b'on':
-            buf = ffi.new('char []', b'\0' * (iwlib.IW_ESSID_MAX_SIZE+1))
+            buf = ffi.new('char []', iwlib.IW_ESSID_MAX_SIZE+1)
             wrq.u.essid.pointer = buf
             wrq.u.essid.length = iwlib.IW_ESSID_MAX_SIZE + 1
             wrq.u.essid.flags = 0

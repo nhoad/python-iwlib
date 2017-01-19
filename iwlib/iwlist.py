@@ -40,7 +40,7 @@ def scan(interface):
 
     scan = head.result
 
-    buf = ffi.new('char []', b'\0' * 1024)
+    buf = ffi.new('char []', 1024)
 
     while scan != ffi.NULL:
         parsed_scan = {}
