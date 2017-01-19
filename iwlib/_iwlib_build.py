@@ -14,7 +14,7 @@
 
 from cffi import FFI
 
-ffi = FFI()
+ffibuilder = FFI()
 
 
 funcs = """
@@ -30,11 +30,11 @@ funcs = """
     void iw_print_bitrate(char *buffer, int buflen, int bitrate);
     void iw_print_freq_value(char *buffer, int buflen, double freq);
     void iw_sockets_close(int sock);
-    int ioctl(int fildes, int request, ...);
+    int ioctl(int fildes, unsigned long int request, ...);
 """
 
 externs = """
-    extern const char const *iw_operation_mode[];
+    extern const char * const iw_operation_mode[];
 """
 
 defs = """
@@ -198,11 +198,15 @@ structs = """
 
     struct iwreq {
         union iwreq_data u;
-        char ifr_ifrn[];
+        char ifr_name[...];
         ...;
     };
 """
 
-ffi.cdef(structs + externs + defs + funcs)
+ffibuilder.set_source("iwlib._iwlib", "#include <iwlib.h>", libraries=['iw'])
+ffibuilder.cdef(structs + externs + defs + funcs)
 
-iwlib = ffi.verify("#include <iwlib.h>", libraries=['iw'])
+iwlib = ffibuilder.verify("#include <iwlib.h>", libraries=['iw'])
+
+if __name__ == "__main__":
+        ffibuilder.compile()

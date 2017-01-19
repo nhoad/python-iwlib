@@ -15,7 +15,7 @@
 import os
 
 from .utils import _get_range_info, _parse_stats, _get_bytes
-from ._iwlib import iwlib, ffi
+from ._iwlib import ffi, lib as iwlib
 
 
 def scan(interface):

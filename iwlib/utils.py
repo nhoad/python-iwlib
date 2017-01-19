@@ -16,7 +16,7 @@ import contextlib
 import errno
 import os
 
-from ._iwlib import iwlib, ffi
+from ._iwlib import ffi, lib as iwlib
 
 
 @contextlib.contextmanager

@@ -16,7 +16,7 @@ import os
 import errno
 
 from .utils import _parse_stats, _get_bytes, iwlib_socket
-from ._iwlib import iwlib, ffi
+from ._iwlib import ffi, lib as iwlib
 
 
 def get_iwconfig(interface):

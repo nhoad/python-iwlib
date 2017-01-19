@@ -4,7 +4,6 @@ import os
 import sys
 
 from setuptools import setup
-from distutils.command.build import build
 
 # Publish Helper.
 if sys.argv[-1] == 'publish':
@@ -13,15 +12,8 @@ if sys.argv[-1] == 'publish':
 
 include_dirs = ['iwlib']
 
-
-class cffi_build(build):
-    def finalize_options(self):
-        from iwlib import _iwlib
-        ext_modules = [_iwlib.ffi.verifier.get_extension('iwlib')]
-        self.distribution.ext_modules = ext_modules
-        build.finalize_options(self)
-
-dependencies = ['cffi']
+dependencies = ['cffi>=1.0.0']
+cffi_modules = ['iwlib/_iwlib_build.py:ffibuilder']
 
 settings = {
     'name': 'iwlib',
@@ -47,7 +39,7 @@ settings = {
     'packages': ['iwlib'],
     'install_requires': dependencies,
     'setup_requires': dependencies,
-    'cmdclass': {'build': build},
+    'cffi_modules': cffi_modules,
 }
 
 setup(**settings)
