@@ -30,10 +30,11 @@ def iwlib_socket(sock=None):
     if sock < 0:
         raise OSError(ffi.errno, os.strerror(ffi.errno))
 
-    yield sock
-
-    if closing:
-        iwlib.iw_sockets_close(sock)
+    try:
+        yield sock
+    finally:
+        if closing:
+            iwlib.iw_sockets_close(sock)
 
 
 def get_max_quality(interface):
