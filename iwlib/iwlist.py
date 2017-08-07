@@ -46,27 +46,27 @@ def scan(interface):
         parsed_scan = {}
 
         if scan.b.has_mode:
-            parsed_scan[b'Mode'] = ffi.string(iwlib.iw_operation_mode[scan.b.mode])
+            parsed_scan['Mode'] = ffi.string(iwlib.iw_operation_mode[scan.b.mode])
 
         if scan.b.essid_on:
-            parsed_scan[b'ESSID'] = ffi.string(scan.b.essid)
+            parsed_scan['ESSID'] = ffi.string(scan.b.essid)
         else:
-            parsed_scan[b'ESSID'] = b'Auto'
+            parsed_scan['ESSID'] = b'Auto'
 
         if scan.has_ap_addr:
             iwlib.iw_ether_ntop(
                 ffi.cast('struct ether_addr *', scan.ap_addr.sa_data), buf)
             if scan.b.has_mode and scan.b.mode == iwlib.IW_MODE_ADHOC:
-                parsed_scan[b'Cell'] = ffi.string(buf)
+                parsed_scan['Cell'] = ffi.string(buf)
             else:
-                parsed_scan[b'Access Point'] = ffi.string(buf)
+                parsed_scan['Access Point'] = ffi.string(buf)
 
         if scan.has_maxbitrate:
             iwlib.iw_print_bitrate(buf, len(buf), scan.maxbitrate.value)
-            parsed_scan[b'BitRate'] = ffi.string(buf)
+            parsed_scan['BitRate'] = ffi.string(buf)
 
         if scan.has_stats:
-            parsed_scan[b'stats'] = _parse_stats(scan.stats)
+            parsed_scan['stats'] = _parse_stats(scan.stats)
 
         results.append(parsed_scan)
         scan = scan.next

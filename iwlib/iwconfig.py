@@ -55,33 +55,33 @@ def _get_iwconfig(interface, sock):
 
     if not get_ext(iwlib.SIOCGIWNWID):
         if wrq.u.nwid.disabled:
-            iwconfig[b'NWID'] = b"Auto"
+            iwconfig['NWID'] = b"Auto"
         else:
-            iwconfig[b'NWID'] = ('%x' % (wrq.u.nwid.value)).encode('utf8')
+            iwconfig['NWID'] = ('%x' % (wrq.u.nwid.value)).encode('utf8')
 
     buf = ffi.new('char []', 1024)
 
     if get_ext(iwlib.SIOCGIWFREQ):
         freq = iwlib.iw_freq2float(ffi.addressof(wrq.u.freq))
         iwlib.iw_print_freq_value(buf, len(buf), freq)
-        iwconfig[b'Frequency'] = ffi.string(buf)
+        iwconfig['Frequency'] = ffi.string(buf)
 
     if get_ext(iwlib.SIOCGIWAP):
         iwlib.iw_ether_ntop(ffi.cast('struct ether_addr *', wrq.u.ap_addr.sa_data), buf)
         mode = wrq.u.mode
         has_mode = 0 <= mode < iwlib.IW_NUM_OPER_MODE
         if has_mode and mode == iwlib.IW_MODE_ADHOC:
-            iwconfig[b'Cell'] = ffi.string(buf)
+            iwconfig['Cell'] = ffi.string(buf)
         else:
-            iwconfig[b'Access Point'] = ffi.string(buf)
+            iwconfig['Access Point'] = ffi.string(buf)
 
     if get_ext(iwlib.SIOCGIWRATE):
         iwlib.iw_print_bitrate(buf, len(buf), wrq.u.bitrate.value)
-        iwconfig[b'BitRate'] = ffi.string(buf)
+        iwconfig['BitRate'] = ffi.string(buf)
 
     if get_ext(iwlib.SIOCGIWRATE):
         iwlib.iw_print_bitrate(buf, len(buf), wrq.u.bitrate.value)
-        iwconfig[b'BitRate'] = ffi.string(buf)
+        iwconfig['BitRate'] = ffi.string(buf)
 
     buf = ffi.new('char []', 1024)
     wrq.u.data.pointer = buf
@@ -92,18 +92,18 @@ def _get_iwconfig(interface, sock):
         key_size = wrq.u.data.length
 
         if flags & iwlib.IW_ENCODE_DISABLED or not key_size:
-            iwconfig[b'Key'] = b'off'
+            iwconfig['Key'] = b'off'
         else:
             key = ffi.new('char []', 1024)
             iwlib.iw_print_key(key, len(key), buf, key_size, flags)
-            iwconfig[b'Key'] = ffi.string(key)
+            iwconfig['Key'] = ffi.string(key)
 
     essid = ffi.new('char []', iwlib.IW_ESSID_MAX_SIZE+1)
     wrq.u.essid.pointer = essid
     wrq.u.essid.length = iwlib.IW_ESSID_MAX_SIZE + 1
     wrq.u.essid.flags = 0
     if get_ext(iwlib.SIOCGIWESSID):
-        iwconfig[b'ESSID'] = ffi.string(ffi.cast('char *', (wrq.u.essid.pointer)))
+        iwconfig['ESSID'] = ffi.string(ffi.cast('char *', (wrq.u.essid.pointer)))
         wrq.u.essid.length = iwlib.IW_ESSID_MAX_SIZE + 1
         wrq.u.essid.flags = 0
 
@@ -111,14 +111,14 @@ def _get_iwconfig(interface, sock):
         mode = wrq.u.mode
         has_mode = 0 <= mode < iwlib.IW_NUM_OPER_MODE
         if has_mode:
-            iwconfig[b'Mode'] = ffi.string(iwlib.iw_operation_mode[mode])
+            iwconfig['Mode'] = ffi.string(iwlib.iw_operation_mode[mode])
 
     stats = ffi.new('iwstats *')
     range = ffi.new('iwrange *')
 
     has_range = int(iwlib.iw_get_range_info(sock, interface, range) >= 0)
     if iwlib.iw_get_stats(sock, interface, stats, range, has_range) >= 0:
-        iwconfig[b'stats'] = _parse_stats(stats)
+        iwconfig['stats'] = _parse_stats(stats)
 
     return iwconfig
 

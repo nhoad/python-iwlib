@@ -74,10 +74,10 @@ def _get_range_info(interface, sock=None):
 
 def _parse_stats(stats):
     return {
-        b'quality': stats.qual.qual,
-        b'level': stats.qual.level,
-        b'noise': stats.qual.noise,
-        b'updated': stats.qual.updated,
+        'quality': stats.qual.qual,
+        'level': stats.qual.level,
+        'noise': stats.qual.noise,
+        'updated': stats.qual.updated,
     }
 
 

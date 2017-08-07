@@ -29,9 +29,6 @@ Change History
 
 1.6
     - Added support for Python 3 (via migration to CFFI)
-    - **API INCOMPATABILITY**: Dictionaries in 1.5 for Python 3 returned keys
-      of type `str`, but values of types `bytes`. They now always return type
-      `bytes`.
 
 1.5 (1st October 2014)
     - Added support for Python 3
