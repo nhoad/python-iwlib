@@ -27,6 +27,9 @@ good to go.
 Change History
 --------------
 
+1.6
+    - Added support for Python 3 (via migration to CFFI)
+
 1.5 (1st October 2014)
     - Added support for Python 3
 

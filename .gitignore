@@ -1,5 +1,7 @@
 build/
 dist/
 iwlib.egg-info/
-*pyc
+*.pyc
 *.so
+*.c
+*.o
