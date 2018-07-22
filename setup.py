@@ -24,7 +24,7 @@ settings = {
     'author_email': 'nathan@getoffmalawn.com',
     'url': 'https://github.com/nathan-hoad/python-iwlib',
     'license': 'GPLv2',
-    'classifiers': (
+    'classifiers': [
         # 'Development Status :: 5 - Production/Stable',
         'Intended Audience :: Developers',
         'Natural Language :: English',
@@ -34,7 +34,7 @@ settings = {
         'Programming Language :: Python :: 2.7',
         'Programming Language :: Python :: 3',
         'Programming Language :: Python :: PyPy',
-    ),
+    ],
     'zip_safe': False,
     'packages': ['iwlib'],
     'install_requires': dependencies,
