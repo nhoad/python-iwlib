@@ -26,6 +26,8 @@ good to go.
 
 Change History
 --------------
+1.6.2 (30th April 2019)
+    - Remove stub test build library from WIP testing code.
 
 1.6 (22nd July 2018)
     - Added support for Python 3 (via migration to CFFI)
