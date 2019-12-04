@@ -41,8 +41,8 @@ def _get_iwconfig(interface, sock):
         return iwlib.iw_get_ext(sock, interface, flag, wrq) >= 0
 
     if not get_ext(iwlib.SIOCGIWNAME):
-        wrq.ifr_ifrn = interface[:iwlib.IFNAMSIZ-1]
-        wrq.ifr_ifrn[iwlib.IFNAMSIZ-1] = b'\0'
+        wrq.ifr_name = interface[:iwlib.IFNAMSIZ-1]
+        wrq.ifr_name[iwlib.IFNAMSIZ-1] = b'\0'
 
         if iwlib.ioctl(sock, iwlib.SIOCGIFFLAGS, wrq) < 0:
             err = errno.ENODEV
