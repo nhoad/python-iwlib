@@ -17,7 +17,7 @@ cffi_modules = ['iwlib/_iwlib_build.py:ffibuilder']
 
 settings = {
     'name': 'iwlib',
-    'version': '1.6.2',
+    'version': '1.7.0',
     'description': "Python module to interface with iwlib",
     'long_description': open('README.rst').read(),
     'author': 'Nathan Hoad',

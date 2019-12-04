@@ -26,6 +26,10 @@ good to go.
 
 Change History
 --------------
+1.7.0 (4th December 2019)
+    - Fix an attribute error in get_iwconfig
+    - Removed Python 2 support
+
 1.6.2 (30th April 2019)
     - Remove stub test build library from WIP testing code.
 
