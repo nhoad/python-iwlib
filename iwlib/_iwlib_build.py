@@ -29,6 +29,7 @@ funcs = """
     void iw_ether_ntop(const struct ether_addr *eth, char *buf);
     void iw_print_bitrate(char *buffer, int buflen, int bitrate);
     void iw_print_freq_value(char *buffer, int buflen, double freq);
+    void iw_print_key(char *buffer, int buflen, const unsigned char *key, int key_size, int key_flags);
     void iw_sockets_close(int sock);
     int ioctl(int fildes, unsigned long int request, ...);
 """
